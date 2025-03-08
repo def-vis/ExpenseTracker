@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
-import { Expense } from './expense.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
