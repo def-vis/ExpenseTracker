@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   private apiUrl = environment.apiUrl + '/users';
   private token: string | null = null;
+  private isLoggedIn = false;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -19,6 +20,7 @@ export class AuthService {
       tap(response => {
         this.token = response.token;
         localStorage.setItem('token', this.token);
+        this.isLoggedIn = true;
       })
     );
   }
@@ -31,10 +33,11 @@ export class AuthService {
     this.token = null;
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+    this.isLoggedIn = false;
   }
 
   isAuthenticated(): boolean {
-    return this.token !== null;
+    return this.isLoggedIn;
   }
 
   getToken(): string | null {

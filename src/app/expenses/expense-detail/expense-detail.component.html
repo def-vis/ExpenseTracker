@@ -3,7 +3,7 @@
   <form (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="description">Description</label>
-      <input id="description" [(ngModel)]="expense.description" name="name" required />
+      <input id="description" [(ngModel)]="expense.description" name="description" required />
     </div>
     <div class="form-group">
       <label for="amount">Amount</label>
@@ -15,7 +15,23 @@
     </div>
     <div class="form-group">
       <label for="category">Category</label>
-      <input id="category" [(ngModel)]="expense.categoryId" name="category" required />
+      <select [(ngModel)]="expense.categoryId" name="category" required>
+        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="newCategory">Add New Category</label>
+      <input id="newCategory" [(ngModel)]="newCategoryName" name="newCategory" />
+      <button type="button" (click)="addCategory()">Add Category</button>
+    </div>
+    <div class="form-group">
+      <label>Existing Categories</label>
+      <ul>
+        <li *ngFor="let category of categories">
+          {{ category.name }}
+          <button type="button" (click)="deleteCategory(category.id)">Delete</button>
+        </li>
+      </ul>
     </div>
     <button type="submit">{{ isEditMode ? 'Update' : 'Add' }}</button>
     <button type="button" (click)="onCancel()">Cancel</button>
