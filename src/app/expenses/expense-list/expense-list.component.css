@@ -1,0 +1,32 @@
+.expense-list {
+  font-family: Arial, sans-serif;
+}
+
+.expense-list h2 {
+  color: #333;
+}
+
+.expense-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.expense-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.expense-list button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.expense-list button:hover {
+  background-color: #ff1a1a;
+}

@@ -1,0 +1,17 @@
+.category-list {
+  font-family: Arial, sans-serif;
+}
+
+.category-list h2 {
+  color: #333;
+}
+
+.category-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.category-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}

@@ -1,0 +1,10 @@
+<div class="expense-list">
+  <h2>Expense List</h2>
+  <button (click)="navigateToAddExpense()">Add Expense</button>
+  <ul>
+    <li *ngFor="let expense of expenses">
+      {{ expense.description }} - {{ expense.amount | currency }}
+      <button (click)="deleteExpense(expense.id)">Delete</button>
+    </li>
+  </ul>
+</div>
