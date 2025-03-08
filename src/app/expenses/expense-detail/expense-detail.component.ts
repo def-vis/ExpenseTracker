@@ -6,7 +6,6 @@ import { CategoryService } from '../../categories/category.service';
 import { Category } from '../../categories/category.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-expense-detail',
@@ -14,7 +13,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
   styleUrls: ['./expense-detail.component.css'],
   encapsulation: ViewEncapsulation.None, // Disable view encapsulation
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgSelectModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule]
 })
 export class ExpenseDetailComponent implements OnInit {
   expense: any = {};
