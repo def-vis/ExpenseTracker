@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
 import { Expense } from './expense.model';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
-  private apiUrl = 'https://localhost:7019/expenses'; // Replace with your API URL
+  private apiUrl = environment.apiUrl + '/expenses'; // Replace with your API URL
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

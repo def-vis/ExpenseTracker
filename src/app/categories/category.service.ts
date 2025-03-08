@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
 import { Category } from './category.model';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = 'https://localhost:7019/categories'; // Replace with your API URL
+  private apiUrl = environment.apiUrl + '/categories'; // Replace with your API URL
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
