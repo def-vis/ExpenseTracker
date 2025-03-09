@@ -21,7 +21,7 @@ export class ExpenseService {
   }
 
   addExpense(expense: any): Observable<any> {
-    return this.http.post(this.apiUrl, expense, { headers: this.authService.getAuthHeaders() });
+    return this.http.post(`${this.apiUrl}`, expense, { headers: this.authService.getAuthHeaders() });
   }
 
   updateExpense(expense: any): Observable<any> {
@@ -31,4 +31,16 @@ export class ExpenseService {
   deleteExpense(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.authService.getAuthHeaders() });
   }
+
+  uploadImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imageFile', file);
+    return this.http.post(`${this.apiUrl}/Extract`, formData, { headers: this.authService.getAuthHeaders() });
+  }
+  uploadScreenshot(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('imageFile', file);
+    return this.http.post(`${this.apiUrl}/ExtractScreenshot`, formData, { headers: this.authService.getAuthHeaders() });
+  }
+  
 }

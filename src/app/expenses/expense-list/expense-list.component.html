@@ -3,7 +3,7 @@
   <button (click)="navigateToAddExpense()">Add Expense</button>
   <ul>
     <li *ngFor="let expense of expenses">
-      {{ expense.description }} - {{ expense.amount | currency }}
+      {{ expense.description}} - {{ expense.amount | currency:'INR'  }}
       <button (click)="deleteExpense(expense.id)">Delete</button>
     </li>
   </ul>

@@ -25,6 +25,16 @@
       <button type="button" (click)="addCategory()">Add Category</button>
     </div>
     <div class="form-group">
+      <label for="image">Upload Gpay Image</label>
+      <input id="image" type="file" (change)="onFileSelected($event)" />
+      <button type="button" (click)="uploadImage()">Upload Gpay Image</button>
+    </div>
+    <div class="form-group">
+      <label for="image">Upload Screenshot</label>
+      <input id="image" type="file" (change)="onFileSelected($event)" />
+      <button type="button" (click)="uploadScreenshot()">Upload Screenshot</button>
+    </div>
+    <div class="form-group">
       <label>Existing Categories</label>
       <ul>
         <li *ngFor="let category of categories">

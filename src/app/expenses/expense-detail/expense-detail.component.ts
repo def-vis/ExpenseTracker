@@ -78,4 +78,31 @@ export class ExpenseDetailComponent implements OnInit {
   onCancel(): void {
     this.router.navigate(['/expenses']);
   }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.expense.image = file;
+    }
+  }
+
+  uploadImage(): void {
+    if (this.expense.image) {
+      this.expenseService.uploadImage(this.expense.image).subscribe((expense: any) => {
+        if(expense.id == 0) {
+        this.expense = expense;
+        }
+        else{
+          this.router.navigate(['/expenses']);
+        }
+      });
+    }
+  }
+  uploadScreenshot(): void {
+    if (this.expense.image) {
+      this.expenseService.uploadScreenshot(this.expense.image).subscribe((expense: any) => {
+        this.router.navigate(['/expenses']);
+      });
+    }
+  }
 }
