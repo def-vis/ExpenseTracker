@@ -14,7 +14,17 @@ export class AuthService {
   private token: string | null = null;
   private isLoggedIn = false;
 
-  constructor(private http: HttpClient, private router: Router, private loaderService: LoaderService) {}
+  constructor(private http: HttpClient, private router: Router, private loaderService: LoaderService) {
+    this.loadToken();
+  }
+
+  private loadToken(): void {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.token = token;
+      this.isLoggedIn = true;
+    }
+  }
 
   login(credentials: { email: string; password: string }): Observable<any> {
     this.loaderService.show();
