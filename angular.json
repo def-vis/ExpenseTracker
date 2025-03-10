@@ -24,7 +24,10 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/favicon.ico",
+              "src/assets",
+              "src/staticwebapp.config.json"
             ],
             "styles": [
               "src/styles.css"
