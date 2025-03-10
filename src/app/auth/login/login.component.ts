@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -30,12 +31,17 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe(
-        () => {
-          this.router.navigate(['/dashboard'])},
-        error => {
-          this.errorMessage = 'Invalid login credentials';
+      this.authService.login(this.loginForm.value).pipe(
+        catchError(error => {
+          this.errorMessage = 'Login failed. Please try again later.';
           alert(this.errorMessage);
+          return of(null);
+        })
+      ).subscribe(
+        response => {
+          if (response) {
+            this.router.navigate(['/dashboard']);
+          }
         }
       );
     }

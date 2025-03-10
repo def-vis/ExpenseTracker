@@ -340,6 +340,7 @@
     <li *ngIf="authService.isAuthenticated()"><a (click)="onLogout()">Logout</a></li>
   </ul>
 </nav>
+<app-loader></app-loader>
 <router-outlet></router-outlet>
 <!-- 
 <router-outlet /> -->

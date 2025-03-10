@@ -1,25 +1,45 @@
-<div class="register-container">
-  <h2>Register</h2>
-  <form (ngSubmit)="register()">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input id="username" [(ngModel)]="username" name="username" required />
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" [(ngModel)]="email" name="email" type="email" required />
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input id="password" [(ngModel)]="password" name="password" type="password" required />
-    </div>
-    <div class="form-group">
-      <label for="currency">Currency</label>
-      <select id="currency" [(ngModel)]="currency" name="currency" required>
-        <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
-      </select>
-    </div>
-    <button type="submit">Register</button>
-  </form>
-  <button (click)="navigateToLogin()" class="back-to-login">Back to Login</button>
+<div class="main-container">
+  <div class="form-container">
+    <h2>Register</h2>
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" formControlName="username" type="text" />
+        <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+          <small class="error">Username is required</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" formControlName="email" type="email" />
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          <small class="error">Email is required and must be valid</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" formControlName="password" type="password" />
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          <small class="error" *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</small>
+          <small class="error" *ngIf="registerForm.get('password')?.errors?.['passwordStrength']">
+            Password must contain a number, a special character, and an uppercase letter
+          </small>
+        </div>
+      </div>
+      <!-- <div class="form-group">
+        <label for="currency">Currency</label>
+        <select id="currency" formControlName="currency">
+          <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+        </select>
+        <div *ngIf="registerForm.get('currency')?.invalid && registerForm.get('currency')?.touched">
+          <small class="error">Currency is required</small>
+        </div>
+      </div> -->
+      <button type="submit" [disabled]="registerForm.invalid">Register</button>
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+    </form>
+    <button (click)="navigateToLogin()">Login</button>
+  </div>
 </div>
