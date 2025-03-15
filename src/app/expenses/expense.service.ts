@@ -53,14 +53,14 @@ export class ExpenseService {
     );
   }
 
-  uploadImage(file: File): Observable<any> {
-    this.loaderService.show();
-    const formData = new FormData();
-    formData.append('imageFile', file);
-    return this.http.post(`${this.apiUrl}/Extract`, formData, { headers: this.authService.getAuthHeaders() }).pipe(
-      finalize(() => this.loaderService.hide())
-    );
-  }
+  // uploadImage(file: File): Observable<any> {
+  //   this.loaderService.show();
+  //   const formData = new FormData();
+  //   formData.append('imageFile', file);
+  //   return this.http.post(`${this.apiUrl}/Extract`, formData, { headers: this.authService.getAuthHeaders() }).pipe(
+  //     finalize(() => this.loaderService.hide())
+  //   );
+  // }
 
   uploadScreenshot(file: File): Observable<any> {
     this.loaderService.show();

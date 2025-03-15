@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseService } from '../expense.service';
 import { Expense } from '../expense.model';
@@ -6,6 +6,8 @@ import { CategoryService } from '../../categories/category.service';
 import { Category } from '../../categories/category.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-expense-detail',
@@ -13,7 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./expense-detail.component.css'],
   encapsulation: ViewEncapsulation.None, // Disable view encapsulation
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatDialogModule, MatButtonModule]
 })
 export class ExpenseDetailComponent implements OnInit {
   expense: any = {};
@@ -25,7 +27,9 @@ export class ExpenseDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private expenseService: ExpenseService,
     private router: Router,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    public dialogRef: MatDialogRef<ExpenseDetailComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +41,7 @@ export class ExpenseDetailComponent implements OnInit {
       });
     } else {
       this.expense = new Expense();
+      this.expense.date = new Date().toISOString().split('T')[0]; // Set default date to current date
     }
     this.getCategories();
   }
@@ -66,17 +71,17 @@ export class ExpenseDetailComponent implements OnInit {
   onSubmit(): void {
     if (this.isEditMode) {
       this.expenseService.updateExpense(this.expense).subscribe(() => {
-        this.router.navigate(['/expenses']);
+        this.dialogRef.close();
       });
     } else {
       this.expenseService.addExpense(this.expense).subscribe(() => {
-        this.router.navigate(['/expenses']);
+        this.dialogRef.close();
       });
     }
   }
 
   onCancel(): void {
-    this.router.navigate(['/expenses']);
+    this.dialogRef.close();
   }
 
   onFileSelected(event: any): void {
@@ -86,23 +91,27 @@ export class ExpenseDetailComponent implements OnInit {
     }
   }
 
-  uploadImage(): void {
-    if (this.expense.image) {
-      this.expenseService.uploadImage(this.expense.image).subscribe((expense: any) => {
-        if(expense.id == 0) {
-        this.expense = expense;
-        }
-        else{
-          this.router.navigate(['/expenses']);
-        }
-      });
-    }
-  }
+  // uploadImage(): void {
+  //   if (this.expense.image) {
+  //     this.expenseService.uploadImage(this.expense.image).subscribe((expense: any) => {
+  //       if(expense.id == 0) {
+  //       this.expense = expense;
+  //       }
+  //       else{
+  //         this.router.navigate(['/expenses']);
+  //       }
+  //     });
+  //   }
+  // }
   uploadScreenshot(): void {
     if (this.expense.image) {
       this.expenseService.uploadScreenshot(this.expense.image).subscribe((expense: any) => {
-        this.router.navigate(['/expenses']);
+        this.dialogRef.close();
       });
     }
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 }

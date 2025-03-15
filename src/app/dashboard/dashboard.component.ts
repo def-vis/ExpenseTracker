@@ -4,13 +4,14 @@ import { CategoryService } from '../categories/category.service';
 import { CommonModule } from '@angular/common';
 import { Expense } from '../expenses/expense.model'; // Ensure you have an Expense model
 import { Router } from '@angular/router';
+import { ExpenseListComponent } from '../expenses/expense-list/expense-list.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule,ExpenseListComponent]
 })
 export class DashboardComponent implements OnInit {
   totalExpenses: number = 0;
@@ -39,11 +40,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  navigateToExpenses(): void {
-    this.router.navigate(['/expenses']);
-  }
+  // navigateToExpenses(): void {
+  //   this.router.navigate(['/expenses']);
+  // }
 
-  navigateToCategories(): void {
-    this.router.navigate(['/categories']);
-  }
+  // navigateToCategories(): void {
+  //   this.router.navigate(['/categories']);
+  // }
 }

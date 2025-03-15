@@ -23,7 +23,7 @@ export class RegisterComponent {
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, this.passwordValidator()]]
-      // ,      currency: ['', Validators.required]
+      ,      currency: ['', Validators.required]
     });
   }
 

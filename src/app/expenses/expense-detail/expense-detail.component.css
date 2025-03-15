@@ -50,7 +50,7 @@ button {
 }
 
 button[type="button"] {
-  background-color: #ccc;
+  background-color: #007bff; /* Change to blue */
 }
 
 button:disabled {
@@ -126,4 +126,9 @@ li button {
 
 .ng-select .ng-select-container .ng-option-selected {
   background-color: #e9ecef;
+}
+
+.red-button {
+  background-color: red !important;
+  color: white !important;
 }
