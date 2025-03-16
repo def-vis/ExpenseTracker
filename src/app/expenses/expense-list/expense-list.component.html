@@ -3,13 +3,21 @@
   <button (click)="openExpenseDetail()">Add Expense</button>
   
   <!-- Use group[0] for key and group[1] for expenses -->
-  <div *ngFor="let group of groupedExpenses">
-    <h3>{{ group[0] }}</h3>
-    <ul>
-      <li *ngFor="let expense of group[1]">
-        {{ expense.description }} - {{ expense.amount | currency:'INR' }} - {{ expense.date | date:'short' }}
-        <button (click)="deleteExpense(expense.id); $event.stopPropagation()">Delete</button>
-      </li>
-    </ul>
+  <div *ngFor="let group of groupedExpenses; let i = index">
+    <h3 (click)="toggleGroup(i)" class="collapsible">{{ group[0] }}</h3>
+    <div *ngIf="expandedGroups[i]" class="content">
+      <ul>
+        <li *ngFor="let expense of group[1]">
+          <div class="expense-row">
+            <div class="expense-details">
+              <span class="expense-description">{{ expense.description }}</span>
+              <span class="expense-amount">{{ expense.amount | currency:'INR' }}</span>
+              <span class="expense-date">{{ expense.date | date:'short' }}</span>
+            </div>
+            <button (click)="deleteExpense(expense.id); $event.stopPropagation()">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

@@ -12,7 +12,6 @@ import moment from 'moment';
 
 type GroupedExpenses = [string, Expense[]][]; 
 
-
 @Component({
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
@@ -23,7 +22,7 @@ type GroupedExpenses = [string, Expense[]][];
 export class ExpenseListComponent implements OnInit {
   expenses: Expense[] = [];
   groupedExpenses: GroupedExpenses = [];
-
+  expandedGroups: boolean[] = [];
 
   constructor(private expenseService: ExpenseService, private router: Router, public dialog: MatDialog) {}
 
@@ -105,11 +104,19 @@ export class ExpenseListComponent implements OnInit {
       key,
       tempGroupedExpenses.get(key)!,
     ]);
+
+    // Initialize expandedGroups array with the first element set to true
+    this.expandedGroups = new Array(this.groupedExpenses.length).fill(false);
+    if (this.expandedGroups.length > 0) {
+      this.expandedGroups[0] = true;
+    }
   
     console.log(this.groupedExpenses);
   }
-  
-  
+
+  toggleGroup(index: number): void {
+    this.expandedGroups[index] = !this.expandedGroups[index];
+  }
 
   openExpenseDetail(): void {
     const dialogRef = this.dialog.open(ExpenseDetailComponent);
