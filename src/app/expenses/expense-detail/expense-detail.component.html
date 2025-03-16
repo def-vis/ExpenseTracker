@@ -1,4 +1,3 @@
-<h2 mat-dialog-title>Expense Detail</h2>
 <mat-dialog-content>
   <div class="expense-detail">
     <h2>{{ isEditMode ? 'Edit Expense' : 'Add Expense' }}</h2>
@@ -6,7 +5,7 @@
       <div class="form-group">
         <label for="image">Upload Screenshot</label>
         <input id="image" type="file" (change)="onFileSelected($event)" />
-        <button type="button" (click)="uploadScreenshot()" [disabled]="!expense.image">Upload Screenshot</button>
+        <button type="button" class="upload-button" (click)="uploadScreenshot()" [disabled]="!expense.image">Upload Screenshot</button>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
@@ -27,34 +26,26 @@
         </select>
       </div>
       <div class="form-group">
+        <label class="collapsible-label" (click)="toggleCategories()">
+          Existing Categories
+          <mat-icon>{{ showCategories ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </label>
+        <div class="collapsible-content" *ngIf="showCategories">
+          <ul>
+            <li *ngFor="let category of categories">
+              {{ category.name }}
+              <button type="button" class="delete-button" (click)="deleteCategory(category.id)">Delete</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group">
         <label for="newCategory">Add New Category</label>
         <input id="newCategory" [(ngModel)]="newCategoryName" name="newCategory" />
         <button type="button" (click)="addCategory()">Add Category</button>
       </div>
-<!-- <div class="form-group">
-        <label for="image">Upload Gpay Image</label>
-        <input id="image" type="file" (change)="onFileSelected($event)" />
-        <button type="button" (click)="uploadImage()">Upload Gpay Image</button>
-      </div> -->
-      <!-- <div class="form-group">
-        <label for="image">Upload Screenshot</label>
-        <input id="image" type="file" (change)="onFileSelected($event)" />
-        <button type="button" (click)="uploadScreenshot()">Upload Screenshot</button>
-      </div> -->
-      <div class="form-group">
-        <label>Existing Categories</label>
-        <ul>
-          <li *ngFor="let category of categories">
-            {{ category.name }}
-            <button type="button" class="red-button" (click)="deleteCategory(category.id)">Delete</button>
-          </li>
-        </ul>
-      </div>
       <button type="submit">{{ isEditMode ? 'Update' : 'Add' }}</button>
-      <button type="button" (click)="onCancel()">Cancel</button>
+      <button type="button" class="cancel-button" (click)="onCancel()">Cancel</button>
     </form>
   </div>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button (click)="close()">Close</button>
-</mat-dialog-actions>

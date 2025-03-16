@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-expense-detail',
@@ -15,13 +16,14 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./expense-detail.component.css'],
   encapsulation: ViewEncapsulation.None, // Disable view encapsulation
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatDialogModule, MatButtonModule]
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, MatDialogModule, MatButtonModule, MatIconModule]
 })
 export class ExpenseDetailComponent implements OnInit {
   expense: any = {};
   categories: any[] = [];
   newCategoryName: string = '';
   isEditMode: boolean = false;
+  showCategories: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -111,7 +113,7 @@ export class ExpenseDetailComponent implements OnInit {
     }
   }
 
-  close(): void {
-    this.dialogRef.close();
+  toggleCategories() {
+    this.showCategories = !this.showCategories;
   }
 }
