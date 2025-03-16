@@ -1,10 +1,12 @@
 <div class="expense-list">
   <h2>Expense List</h2>
   <button (click)="openExpenseDetail()">Add Expense</button>
-  <div *ngFor="let group of groupedExpenses | keyvalue">
-    <h3>{{ group.key }}</h3>
+  
+  <!-- Use group[0] for key and group[1] for expenses -->
+  <div *ngFor="let group of groupedExpenses">
+    <h3>{{ group[0] }}</h3>
     <ul>
-      <li *ngFor="let expense of group.value" >
+      <li *ngFor="let expense of group[1]">
         {{ expense.description }} - {{ expense.amount | currency:'INR' }} - {{ expense.date | date:'short' }}
         <button (click)="deleteExpense(expense.id); $event.stopPropagation()">Delete</button>
       </li>

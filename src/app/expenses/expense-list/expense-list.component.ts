@@ -10,9 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { ExpenseDetailComponent } from '../expense-detail/expense-detail.component';
 import moment from 'moment';
 
-interface GroupedExpenses {
-  [key: string]: Expense[];
-}
+type GroupedExpenses = [string, Expense[]][]; 
+
 
 @Component({
   selector: 'app-expense-list',
@@ -23,7 +22,8 @@ interface GroupedExpenses {
 })
 export class ExpenseListComponent implements OnInit {
   expenses: Expense[] = [];
-  groupedExpenses: GroupedExpenses = {};
+  groupedExpenses: GroupedExpenses = [];
+
 
   constructor(private expenseService: ExpenseService, private router: Router, public dialog: MatDialog) {}
 
@@ -40,73 +40,76 @@ export class ExpenseListComponent implements OnInit {
 
   groupExpenses(): void {
     const currentDate = moment();
-    const tempGroupedExpenses: GroupedExpenses = this.expenses.reduce(
-      (groups: GroupedExpenses, expense: Expense) => {
-        const expenseDate = moment(expense.date);
-        const diffDays = currentDate.diff(expenseDate, 'days');
-
-        let groupKey = '';
-
-        if (diffDays < 7) {
-          groupKey = `This Week`;
-        } else if (expenseDate.isSame(currentDate, 'month')) {
-          const weekOfMonth = Math.ceil(expenseDate.date() / 7);
-          groupKey = `Week ${weekOfMonth} of ${expenseDate.format('MMMM YYYY')}`;
-        } else {
-          groupKey = expenseDate.format('MMMM YYYY');
-        }
-
-        if (!groups[groupKey]) {
-          groups[groupKey] = [];
-        }
-
-        groups[groupKey].push(expense);
-        return groups;
-      },
-      {}
-    );
-
-    // Sort the group keys in chronological order
-    const sortedKeys = Object.keys(tempGroupedExpenses).sort((a, b) => {
-      // Define custom order
-      const order = [
-        'This Week',
-        'Week 1 of',
-        'Week 2 of',
-        'Week 3 of',
-        'Week 4 of'
-      ];
-
-      const aIsWeek = order.some(prefix => a.startsWith(prefix));
-      const bIsWeek = order.some(prefix => b.startsWith(prefix));
-
+    
+    // Use a Map to store expenses since it maintains order
+    const tempGroupedExpenses = new Map<string, Expense[]>();
+  
+    this.expenses.forEach((expense) => {
+      const expenseDate = moment(expense.date);
+      const diffDays = currentDate.diff(expenseDate, 'days');
+  
+      let groupKey = '';
+  
+      if (diffDays < 7) {
+        groupKey = `This Week`;
+      } else if (expenseDate.isSame(currentDate, 'month')) {
+        const weekOfMonth = Math.ceil(expenseDate.date() / 7);
+        groupKey = `Week ${weekOfMonth} of ${expenseDate.format('MMMM YYYY')}`;
+      } else {
+        groupKey = expenseDate.format('MMMM YYYY');
+      }
+  
+      if (!tempGroupedExpenses.has(groupKey)) {
+        tempGroupedExpenses.set(groupKey, []);
+      }
+  
+      tempGroupedExpenses.get(groupKey)!.push(expense);
+    });
+  
+    // Sort keys in order
+    const sortedKeys = Array.from(tempGroupedExpenses.keys()).sort((a, b) => {
       if (a === 'This Week') return -1;
       if (b === 'This Week') return 1;
-
-      if (aIsWeek && bIsWeek) {
-        return a.localeCompare(b); // Sort weeks in order
-      } else if (aIsWeek) {
-        return -1; // Place weeks before months
-      } else if (bIsWeek) {
-        return 1; // Place months after weeks
+  
+      const weekRegex = /^Week (\d) of (.+)$/;
+      const aMatch = a.match(weekRegex);
+      const bMatch = b.match(weekRegex);
+  
+      if (aMatch && bMatch) {
+        // Compare by month first
+        const momentA = moment(aMatch[2], 'MMMM YYYY');
+        const momentB = moment(bMatch[2], 'MMMM YYYY');
+  
+        if (momentA.isBefore(momentB)) return 1;
+        if (momentA.isAfter(momentB)) return -1;
+  
+        // If same month, compare by week number
+        const weekA = parseInt(aMatch[1]);
+        const weekB = parseInt(bMatch[1]);
+        return weekA - weekB;
       }
-
+  
       // Handle "Month Year" cases
       const momentA = moment(a, 'MMMM YYYY', true);
       const momentB = moment(b, 'MMMM YYYY', true);
-
+  
       if (momentA.isValid() && momentB.isValid()) {
         return momentB.isBefore(momentA) ? -1 : 1; // Newest month first
       }
-
+  
       return 0;
     });
-
-    this.groupedExpenses = Object.fromEntries(
-      sortedKeys.map(key => [key, tempGroupedExpenses[key]])
-    );
+  
+    // Convert sorted keys back into a sorted array of key-value pairs
+    this.groupedExpenses = sortedKeys.map((key) => [
+      key,
+      tempGroupedExpenses.get(key)!,
+    ]);
+  
     console.log(this.groupedExpenses);
   }
+  
+  
 
   openExpenseDetail(): void {
     const dialogRef = this.dialog.open(ExpenseDetailComponent);
